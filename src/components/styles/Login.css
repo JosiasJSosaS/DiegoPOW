@@ -1,0 +1,103 @@
+/* Usa la misma paleta que definimos: */
+:root{
+  --bg: #E4B1AB;         /* fondo principal */
+  --title-bg: #CC444B;   /* barra superior */
+  --card: #E39695;       /* base tarjeta/botón */
+  --card-hover: #E17775; /* hover */
+  --text: #ffffff;
+  --ink: #1E1E1E;
+  --cancel: #4E0B0B;     /* botón cancelar */
+}
+
+/* Página */
+.login{
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Topbar */
+.login__topbar{
+  background: var(--title-bg);
+  box-shadow: 0 4px 18px rgba(0,0,0,.12);
+  color: var(--text);
+}
+.login__inner{
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 18px 24px;
+}
+.login__inner h1{ margin: 0; font-weight: 700; font-size: 22px; }
+
+/* Contenido centrado */
+.login__stage{
+  display: grid;
+  place-items: center;
+  padding: clamp(32px, 8vw, 72px) 20px;
+}
+
+/* Tarjeta/formulario */
+.login__card{
+  width: min(680px, 100%);
+  background: color-mix(in srgb, var(--card) 45%, white 55%);
+  padding: clamp(22px, 4vw, 36px);
+  border-radius: 28px;
+  box-shadow:
+    0 14px 36px rgba(204, 68, 75, .28),
+    inset 0 1px 0 rgba(255,255,255,.35);
+  display: grid;
+  gap: 18px;
+}
+
+/* Inputs */
+.field input{
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: #E9EAEC;               /* similar al mock */
+  color: #222;
+  font-size: 18px;
+  padding: 16px 22px;
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.65);
+}
+.field input::placeholder{ color: #9aa0a6; }
+
+/* Botones */
+.btn{
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 14px 22px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+
+.btn--primary{
+  background: var(--card);
+  color: #1f1f1f;
+  box-shadow: 0 8px 18px rgba(204, 68, 75, .25);
+}
+.btn--primary:hover{
+  background: var(--card-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(204, 68, 75, .32);
+}
+
+.btn--ghost{
+  background: var(--cancel);
+  color: #fff;
+  margin-top: 6px;
+  box-shadow: 0 8px 18px rgba(78, 11, 11, .35);
+}
+.btn--ghost:hover{ transform: translateY(-1px); }
+
+/* Responsive */
+@media (max-width: 560px){
+  .login__card{ gap: 14px; }
+  .btn{ font-size: 16px; }
+}
