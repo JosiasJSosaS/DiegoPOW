@@ -89,6 +89,7 @@
   border:0;
   width:100%;
   text-align:left;
+
   display:flex;
   align-items:center;
   gap:10px;
@@ -132,7 +133,7 @@
   flex-direction:column;
   gap:18px;
   overflow-y:auto;
-  padding-right:4px;
+  padding-right:4px; /* espacio para la barra */
 }
 
 /* ===== Search + Add ===== */
@@ -141,7 +142,7 @@
   border-radius:18px;
   padding:10px;
   display:grid;
-  grid-template-columns:28px 1fr auto;
+  grid-template-columns:28px 1fr auto; /* icono | input | botón */
   gap:10px;
   align-items:center;
   box-shadow:0 10px 24px rgba(204,68,75,.18);
@@ -166,7 +167,6 @@
   border-radius:999px;
   font-weight:800;
   cursor:pointer;
-  margin-left: 1000px;
 }
 
 /* Botón Añadir */
@@ -183,7 +183,6 @@
   box-shadow:0 10px 22px rgba(204,68,75,.24);
   justify-self:end;
   transition:transform .15s ease, background .15s ease;
-  margin-left: 1000px
 }
 .btn--add:hover{
   background:var(--card-hover);
@@ -198,7 +197,7 @@
   padding-bottom:20px;
 }
 
-/* ===== Tarjetas ===== */
+/* ===== Tarjetas (películas) ===== */
 .hp-card{
   background:#fff;
   border-radius:18px;
@@ -226,6 +225,38 @@
 .btn:focus-visible{
   outline:2px solid rgba(0,0,0,.25);
   outline-offset:2px;
+}
+
+/* ===== Scrollbar temática ===== */
+
+/* Firefox */
+.hp__main{
+  scrollbar-width: thin; /* thin | auto */
+  scrollbar-color: var(--card) rgba(255,255,255,.35); /* thumb | track */
+}
+
+/* Chrome / Edge / Safari */
+.hp__main::-webkit-scrollbar{
+  width:12px;
+}
+.hp__main::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.35);
+  border-radius:12px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.25);
+}
+.hp__main::-webkit-scrollbar-thumb{
+  background: linear-gradient(180deg, var(--card), var(--card-hover));
+  border-radius:999px;
+  border:3px solid rgba(255,255,255,.35);
+  box-shadow:
+    0 2px 6px rgba(204, 68, 75, .35),
+    inset 0 1px 0 rgba(255,255,255,.5);
+}
+.hp__main::-webkit-scrollbar-thumb:hover{
+  background: var(--card-hover);
+}
+.hp__main::-webkit-scrollbar-corner{
+  background: transparent;
 }
 
 /* ===== Responsive ===== */

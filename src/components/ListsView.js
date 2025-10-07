@@ -14,7 +14,11 @@ const mockLists = Array.from({ length: 12 }).map((_, i) => ({
   ],
 }));
 
-export default function ListsView({ onGoLogin, onGoPeliculas }) {
+export default function ListsView({
+  onGoLogin,
+  onGoPeliculas,
+  onOpenListDetail, // <-- nuevo prop
+}) {
   const [q, setQ] = useState("");
 
   const filtered = useMemo(() => {
@@ -23,6 +27,14 @@ export default function ListsView({ onGoLogin, onGoPeliculas }) {
       ? mockLists
       : mockLists.filter((l) => l.creator.toLowerCase().includes(t));
   }, [q]);
+
+  // Accesibilidad: abrir con Enter/Espacio
+  const onKeyOpen = (e, list) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onOpenListDetail && onOpenListDetail(list);
+    }
+  };
 
   return (
     <div className="hp">
@@ -40,15 +52,15 @@ export default function ListsView({ onGoLogin, onGoPeliculas }) {
         {/* Sidebar */}
         <aside className="hp__sidebar">
           <nav>
-            <a className="nav__item" onClick={onGoPeliculas}>
+            <button type="button" className="nav__item" onClick={onGoPeliculas}>
               <FiFilm /> Películas
-            </a>
-            <a className="nav__item nav__item--active">
+            </button>
+            <button type="button" className="nav__item nav__item--active">
               <FiList /> Listas
-            </a>
-            <a className="nav__item">
+            </button>
+            <button type="button" className="nav__item">
               <FiUser /> Usuarios
-            </a>
+            </button>
           </nav>
 
           <div className="hp__profile">
@@ -73,7 +85,15 @@ export default function ListsView({ onGoLogin, onGoPeliculas }) {
           {/* Grid de listas */}
           <section className="lists-grid">
             {filtered.map((l) => (
-              <article className="list-card" key={l.id}>
+              <article
+                key={l.id}
+                className="list-card"
+                role="button"
+                tabIndex={0}
+                onClick={() => onOpenListDetail && onOpenListDetail(l)}
+                onKeyDown={(e) => onKeyOpen(e, l)}
+                title={`Abrir ${l.title}`}
+              >
                 <div className="list-card__thumbs">
                   {l.avatars.slice(0, 4).map((src, idx) => (
                     <img key={idx} src={src} alt="" />
