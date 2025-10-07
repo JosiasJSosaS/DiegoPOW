@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import './styles/HomePublic.css';
-import { FiSearch, FiPlus, FiUser, FiList, FiFilm } from 'react-icons/fi';
+import { FiSearch, FiPlus, FiUser, FiList, FiFilm, FiMenu } from 'react-icons/fi';
 
 const mockMovies = Array.from({ length: 12 }).map((_, i) => ({
   id: i + 1,
@@ -9,8 +9,14 @@ const mockMovies = Array.from({ length: 12 }).map((_, i) => ({
   poster: `https://picsum.photos/seed/poster${i}/480/320`,
 }));
 
-export default function HomePublic({ onRequireAuth, onGoLogin, onGoLists }) {
+export default function HomePublic({
+  onRequireAuth,
+  onGoLogin,
+  onGoLists,
+  onGoUsers = () => {},   
+}) {
   const [q, setQ] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const filtered = useMemo(() => {
     const t = q.trim().toLowerCase();
@@ -18,11 +24,19 @@ export default function HomePublic({ onRequireAuth, onGoLogin, onGoLists }) {
   }, [q]);
 
   return (
-    <div className="hp">
+    <div className={`hp ${menuOpen ? 'hp--menu-open' : ''}`}>
+      {/* Overlay móvil para cerrar sidebar */}
+      <div className="hp__overlay" onClick={() => setMenuOpen(false)} />
+
       {/* Topbar */}
       <header className="hp__topbar">
         <div className="hp__topbar__inner">
-          <h1>Películas</h1>
+          <div className="hp__brand">
+            <button className="hp__burger" onClick={() => setMenuOpen(v => !v)} aria-label="Abrir menú">
+              <FiMenu size={20} />
+            </button>
+            <h1>Películas</h1>
+          </div>
           <div className="hp__actions">
             <button className="hp__signin" onClick={onGoLogin}>
               <FiUser size={18} /> Iniciar sesión
@@ -31,21 +45,17 @@ export default function HomePublic({ onRequireAuth, onGoLogin, onGoLists }) {
         </div>
       </header>
 
-      <div className="hp__layout">
-        {/* Sidebar */}
+      <div className="hp__layout" onClick={() => menuOpen && setMenuOpen(false)}>
+        {/* Sidebar (off-canvas en móvil) */}
         <aside className="hp__sidebar">
           <nav>
             <button type="button" className="nav__item nav__item--active">
               <FiFilm /> Películas
             </button>
-            <button
-              type="button"
-              className="nav__item"
-              onClick={onGoLists}            /* ← aquí navegamos a ListsView */
-            >
+            <button type="button" className="nav__item" onClick={onGoLists}>
               <FiList /> Listas
             </button>
-            <button type="button" className="nav__item">
+            <button type="button" className="nav__item" onClick={onGoUsers}>
               <FiUser /> Usuarios
             </button>
           </nav>
@@ -67,7 +77,11 @@ export default function HomePublic({ onRequireAuth, onGoLogin, onGoLists }) {
               placeholder="Buscar..."
               aria-label="Buscar películas"
             />
-            <button className="btn btn--add" onClick={onRequireAuth} title="Debes iniciar sesión">
+            <button
+              className="btn btn--add hp__btn-add"
+              onClick={onRequireAuth}
+              title="Debes iniciar sesión"
+            >
               <FiPlus /> Añadir
             </button>
           </div>

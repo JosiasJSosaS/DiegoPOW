@@ -1,22 +1,53 @@
 /* ===== Paleta ===== */
 :root{
-  --bg:#E4B1AB;          /* fondo */
-  --title:#CC444B;       /* topbar */
-  --card:#E39695;        /* base botones, sidebar, etc. */
-  --card-hover:#E17775;  /* hover */
+  --bg:#E4B1AB;
+  --title:#CC444B;
+  --card:#E39695;
+  --card-hover:#E17775;
   --text:#ffffff;
   --ink:#151515;
   --muted:#4b4b4b;
-  --topbar-h:64px;       /* alto fijo de topbar */
+  --topbar-h:64px;
+  --sidebar-w: min(82vw, 320px);   /* ancho del sidebar en móvil */
 }
 
 /* ===== Estructura general ===== */
+html, body { height: 100%; }
+body { margin: 0; }
+
 .hp{
-  height:100vh;
+  /* dvh evita el bug de 100vh en móviles con barras */
+  min-height: 100dvh;
   display:grid;
   grid-template-rows: var(--topbar-h) 1fr;
   background:var(--bg);
   color:var(--ink);
+  position: relative;
+  min-height: 0;                 /* clave para scroll en hijos */
+}
+
+/* Clase cuando el menú está abierto en móvil */
+.hp--menu-open { overflow: hidden; } /* evita scroll del fondo al abrir menú */
+
+/* ===== Overlay (solo fuera del sidebar) ===== */
+.hp__overlay{
+  position: fixed;
+  top: var(--topbar-h);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  background: transparent;     /* sin bg ni blur por defecto */
+  z-index: 39;
+  pointer-events: none;
+}
+.hp--menu-open .hp__overlay{
+  display: block;
+  left: var(--sidebar-w);                      /* inicia donde termina el sidebar */
+  width: calc(100vw - var(--sidebar-w));
+  background: rgba(0,0,0,.25);
+  backdrop-filter: blur(2px);
+  pointer-events: auto;                        /* permite click para cerrar */
 }
 
 /* ===== Topbar ===== */
@@ -27,32 +58,38 @@
   height:var(--topbar-h);
   display:flex;
   align-items:center;
+  position: sticky;
+  top: 0;
+  z-index: 40;
 }
 .hp__topbar__inner{
   max-width:1200px;
   margin:0 auto;
-  padding:0 22px;
+  padding:0 12px;
   display:flex;
   align-items:center;
+  gap: 10px;
   justify-content:space-between;
 }
+.hp__brand{ display:flex; align-items:center; gap:10px; }
+.hp__burger{
+  display:none;
+  -webkit-appearance:none; appearance:none;
+  border:0; background:transparent; color:#fff;
+  width:36px; height:36px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+}
+.hp__burger:active{ transform: scale(.98); }
+
 .hp__topbar h1{
-  margin:0;
-  font-size:24px;
-  font-weight:800;
-  letter-spacing:.3px;
+  margin:0; font-size:24px; font-weight:800; letter-spacing:.3px;
 }
 .hp__actions{ display:flex; gap:10px; }
 .hp__signin{
   background:rgba(255,255,255,.18);
-  color:#fff;
-  border:0;
-  border-radius:999px;
-  padding:8px 14px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:8px;
+  color:#fff; border:0; border-radius:999px; padding:8px 14px;
+  cursor:pointer; display:flex; align-items:center; gap:8px;
 }
 .hp__signin:hover{ background:rgba(255,255,255,.26); }
 
@@ -65,7 +102,10 @@
   grid-template-columns:240px 1fr;
   gap:24px;
   padding:24px;
-  overflow:hidden; /* solo scrollea el main */
+  overflow:hidden;               /* Desktop: solo scrollea el main */
+  position: relative;
+  z-index: 1;
+  min-height: 0;                 /* clave para scroll del main */
 }
 
 /* ===== Sidebar ===== */
@@ -78,32 +118,17 @@
   justify-content:space-between;
   box-shadow:0 12px 30px rgba(204,68,75,.25);
   height:100%;
-  overflow:hidden;
+  overflow:hidden; /* desktop */
 }
 
 /* Botones de navegación */
 .nav__item{
-  -webkit-appearance:none;
-  appearance:none;
-  background:transparent;
-  border:0;
-  width:100%;
-  text-align:left;
-
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:12px 14px;
-  border-radius:12px;
-  color:#1f1f1f;
-  font-weight:700;
-  cursor:pointer;
-  transition: background .15s ease, transform .15s ease;
+  -webkit-appearance:none; appearance:none; background:transparent; border:0;
+  width:100%; text-align:left; display:flex; align-items:center; gap:10px;
+  padding:12px 14px; border-radius:12px; color:#1f1f1f; font-weight:700;
+  cursor:pointer; transition: background .15s ease, transform .15s ease;
 }
-.nav__item:hover{
-  background:rgba(255,255,255,.35);
-  transform:translateY(-1px);
-}
+.nav__item:hover{ background:rgba(255,255,255,.35); transform:translateY(-1px); }
 .nav__item--active{
   background:var(--card);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.5);
@@ -111,161 +136,148 @@
 .nav__item:not(.nav__item--active){ opacity:.9; }
 
 .hp__profile{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:8px 10px;
-  margin-top:8px;
+  display:flex; align-items:center; gap:12px; padding:8px 10px; margin-top:8px;
 }
 .pfp{
-  width:40px;
-  height:40px;
-  border-radius:50%;
+  width:40px; height:40px; border-radius:50%;
   background:linear-gradient(135deg,#7ae 0,#afa 100%);
-  border:3px solid #fff;
-  box-shadow:0 6px 12px rgba(0,0,0,.15);
+  border:3px solid #fff; box-shadow:0 6px 12px rgba(0,0,0,.15);
 }
 .pfp__text{ font-weight:700; }
 
 /* ===== Main ===== */
 .hp__main{
-  display:flex;
-  flex-direction:column;
-  gap:18px;
+  display:flex; flex-direction:column; gap:18px;
   overflow-y:auto;
+  -webkit-overflow-scrolling: touch;  /* inercia iOS */
   scroll-behavior:smooth;
-  
-  /* Espaciado lateral equilibrado */
-  padding-right:24px !important;  /* mismo espacio que el gap lateral */
+  padding-right:24px !important;
   padding-left:0;
+  min-height: 0;                 /* crítico en grid */
 }
 
-/* ===== Search + Add ===== */
+/* ===== Search + Add ===== — Desktop: FLEX robusto */
 .hp__search{
   background:rgba(255,255,255,.28);
   border-radius:18px;
   padding:10px;
-  display:grid;
-  grid-template-columns:28px 1fr auto; /* icono | input | botón */
-  gap:10px;
+  display:flex;
   align-items:center;
+  gap:10px;
   box-shadow:0 10px 24px rgba(204,68,75,.18);
 }
-.search__icon{ margin-left:6px; opacity:.9; }
-
+.search__icon{ margin-left:6px; opacity:.9; flex:0 0 auto; }
 .hp__search input{
-  width:100%;
-  border:0;
-  outline:none;
-  background:#ECEDEF;
-  padding:12px 14px;
-  border-radius:999px;
-  font-size:16px;
+  flex:1 1 auto;
+  min-width:0;
+  border:0; outline:none; background:#ECEDEF;
+  padding:12px 14px; border-radius:999px; font-size:16px; width:auto;
 }
 
-/* Botones genéricos */
+/* ===== Botones ===== */
 .btn{
-  -webkit-appearance:none;
-  appearance:none;
-  border:0;
-  border-radius:999px;
-  font-weight:800;
-  cursor:pointer;
+  -webkit-appearance:none; appearance:none; border:0; border-radius:999px;
+  font-weight:800; cursor:pointer; font-size:16px; padding:14px 22px;
+  transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease;
+  overflow:visible;
 }
-
-/* Botón Añadir */
 .btn--add{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  height:42px;
-  padding:0 16px;
-  white-space:nowrap;
-  background:var(--card);
-  color:#1f1f1f;
-  box-shadow:0 10px 22px rgba(204,68,75,.24);
-  justify-self:end;
-  transition:transform .15s ease, background .15s ease;
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  height:42px; padding:0 16px; white-space:nowrap;
+  background:var(--card); color:#1f1f1f; box-shadow:0 10px 22px rgba(204,68,75,.24);
 }
-.btn--add:hover{
-  background:var(--card-hover);
-  transform:translateY(-1px);
+.btn--add:hover{ background:var(--card-hover); transform:translateY(-1px); }
+.hp__btn-add{
+  flex:0 0 auto; min-width:120px; height:42px; padding:0 18px; white-space:nowrap;
+  align-self:center; margin-right:6px; box-shadow:0 8px 20px rgba(204,68,75,.25);
 }
+.hp__btn-add:hover{ transform:translateY(-2px); background:var(--card-hover); box-shadow:0 10px 24px rgba(204,68,75,.35); }
 
 /* ===== Grid ===== */
 .grid{
-  display:grid;
-  gap:22px;
-  grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
+  display:grid; gap:22px; grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
   padding-bottom:20px;
 }
 
-/* ===== Tarjetas (películas) ===== */
+/* ===== Tarjetas ===== */
 .hp-card{
-  background:#fff;
-  border-radius:18px;
-  overflow:hidden;
+  background:#fff; border-radius:18px; overflow:hidden;
   box-shadow:0 12px 28px rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,.3);
   transition:transform .16s ease, box-shadow .16s ease;
 }
-.hp-card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 16px 34px rgba(0,0,0,.16);
-}
-.hp-card img{
-  width:100%;
-  height:200px;
-  object-fit:cover;
-  display:block;
-}
+.hp-card:hover{ transform:translateY(-3px); box-shadow:0 16px 34px rgba(0,0,0,.16); }
+.hp-card img{ width:100%; height:200px; object-fit:cover; display:block; }
 .hp-card__body{ padding:12px 14px; }
 .hp-card__title{ margin:0 0 6px 0; font-size:16px; font-weight:800; }
 .hp-card__meta{ display:flex; justify-content:space-between; align-items:center; }
 .muted{ color:var(--muted); }
 
 /* ===== Accesibilidad ===== */
-.nav__item:focus-visible,
-.btn:focus-visible{
-  outline:2px solid rgba(0,0,0,.25);
-  outline-offset:2px;
+.nav__item:focus-visible, .btn:focus-visible{
+  outline:2px solid rgba(0,0,0,.25); outline-offset:2px;
 }
 
 /* ===== Scrollbar temática ===== */
-
-/* Firefox */
-.hp__main{
-  scrollbar-width: thin; /* thin | auto */
-  scrollbar-color: var(--card) rgba(255,255,255,.35); /* thumb | track */
-}
-
-/* Chrome / Edge / Safari */
-.hp__main::-webkit-scrollbar{
-  width:12px;
-}
+.hp__main{ scrollbar-width: thin; scrollbar-color: var(--card) rgba(255,255,255,.35); }
+.hp__main::-webkit-scrollbar{ width:12px; }
 .hp__main::-webkit-scrollbar-track{
-  background: rgba(255,255,255,.35);
-  border-radius:12px;
+  background: rgba(255,255,255,.35); border-radius:12px;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.25);
 }
 .hp__main::-webkit-scrollbar-thumb{
   background: linear-gradient(180deg, var(--card), var(--card-hover));
-  border-radius:999px;
-  border:3px solid rgba(255,255,255,.35);
-  box-shadow:
-    0 2px 6px rgba(204, 68, 75, .35),
-    inset 0 1px 0 rgba(255,255,255,.5);
+  border-radius:999px; border:3px solid rgba(255,255,255,.35);
+  box-shadow: 0 2px 6px rgba(204, 68, 75, .35), inset 0 1px 0 rgba(255,255,255,.5);
 }
-.hp__main::-webkit-scrollbar-thumb:hover{
-  background: var(--card-hover);
-}
-.hp__main::-webkit-scrollbar-corner{
-  background: transparent;
-}
+.hp__main::-webkit-scrollbar-thumb:hover{ background: var(--card-hover); }
+.hp__main::-webkit-scrollbar-corner{ background: transparent; }
 
 /* ===== Responsive ===== */
 @media (max-width:940px){
-  .hp__layout{ grid-template-columns:1fr; }
-  .hp__sidebar{ order:2; height:auto; }
-  .hp__main{ overflow-y:visible; }
+  .hp__layout{ grid-template-columns:1fr; gap:16px; padding:16px; overflow:visible; }
+
+  .hp__burger{ display:flex; }
+
+  /* Sidebar como panel lateral deslizante */
+  .hp__sidebar{
+    position: fixed;
+    top: var(--topbar-h);
+    bottom: 0;
+    left: 0;
+    width: var(--sidebar-w);
+    max-width: 90vw;
+    border-radius: 0 18px 18px 0;
+    transform: translateX(-110%);
+    transition: transform .22s ease;
+    z-index: 41;
+    overflow: auto;                    /* el panel en sí scrollea */
+    -webkit-overflow-scrolling: touch;
+    background: color-mix(in srgb, var(--card) 38%, white 62%);
+    box-shadow: none;
+  }
+  .hp--menu-open .hp__sidebar{
+    transform: translateX(0);
+    box-shadow: 0 20px 50px rgba(0,0,0,.35);
+  }
+
+  /* El main sigue scrolleando en móvil */
+  .hp__main{ overflow-y:auto; padding-right:0 !important; }
+
+  /* Buscador en grid si el botón necesita bajar */
+  .hp__search{
+    display:grid;
+    grid-template-columns: 28px 1fr;
+    grid-auto-rows:min-content;
+    row-gap:10px;
+  }
+  .hp__search input{ width:100%; }
+  .hp__btn-add{
+    grid-column:1 / -1;
+    justify-self:end;
+    min-width:120px;
+  }
+}
+
+@media (max-width:640px){
+  .hp__topbar__inner{ padding:0 10px; }
 }

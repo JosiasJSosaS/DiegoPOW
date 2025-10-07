@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import './App.css';
+
 import HomePublic from './components/HomePublic';
 import Login from './components/Login';
 import Register from './components/Register';
 import Autorizar from './components/Autorizar';
 import ListsView from './components/ListsView';
-import ListDetail from './components/ListDetail'; // nueva pantalla
+import ListDetail from './components/ListDetail';
+import UsersView from './components/UsersView'; // NUEVO
 
 export default function App() {
   // pantallas posibles:
-  // 'public' | 'auth' | 'login' | 'register' | 'listas' | 'listDetail'
+  // 'public' | 'auth' | 'login' | 'register' | 'listas' | 'listDetail' | 'usuarios'
   const [screen, setScreen] = useState('public');
 
   // ======= LOGIN =======
@@ -20,7 +22,7 @@ export default function App() {
   if (screen === 'register')
     return <Register onCancel={() => setScreen('public')} />;
 
-  // ======= AUTORIZAR (pantalla con "Iniciar sesión" y "Nuevo usuario") =======
+  // ======= AUTORIZAR =======
   if (screen === 'auth')
     return (
       <Autorizar
@@ -29,15 +31,17 @@ export default function App() {
       />
     );
 
-  // ======= LISTAS (vista principal de listas) =======
+  // ======= LISTAS =======
   if (screen === 'listas')
-    return (
-      <ListsView
-        onGoLogin={() => setScreen('login')}
-        onGoPeliculas={() => setScreen('public')}
-        onOpenListDetail={() => setScreen('listDetail')} // <-- click en una lista
-      />
-    );
+  return (
+    <ListsView
+      onGoLogin={() => setScreen('login')}
+      onGoPeliculas={() => setScreen('public')}
+      onOpenListDetail={() => setScreen('listDetail')}
+      onGoUsers={() => setScreen('usuarios')}   // 👈 NUEVO
+    />
+  );
+
 
   // ======= DETALLE DE LISTA =======
   if (screen === 'listDetail')
@@ -52,12 +56,23 @@ export default function App() {
       />
     );
 
+  // ======= USUARIOS =======
+  if (screen === 'usuarios')
+    return (
+      <UsersView
+        onGoPeliculas={() => setScreen('public')}
+        onGoListas={() => setScreen('listas')}
+        onGoLogin={() => setScreen('login')}
+      />
+    );
+
   // ======= HOME (público por defecto) =======
   return (
     <HomePublic
       onRequireAuth={() => setScreen('auth')}
       onGoLogin={() => setScreen('login')}
       onGoLists={() => setScreen('listas')}
+      onGoUsers={() => setScreen('usuarios')}   // NUEVO
     />
   );
 }

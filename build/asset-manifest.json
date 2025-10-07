@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/DiegoPOW/static/css/main.ea450e65.css",
+    "main.css": "/DiegoPOW/static/css/main.cd65be08.css",
     "main.js": "/DiegoPOW/static/js/main.ae4af8f0.js",
     "index.html": "/DiegoPOW/index.html",
-    "main.ea450e65.css.map": "/DiegoPOW/static/css/main.ea450e65.css.map",
+    "main.cd65be08.css.map": "/DiegoPOW/static/css/main.cd65be08.css.map",
     "main.ae4af8f0.js.map": "/DiegoPOW/static/js/main.ae4af8f0.js.map"
   },
   "entrypoints": [
-    "static/css/main.ea450e65.css",
+    "static/css/main.cd65be08.css",
     "static/js/main.ae4af8f0.js"
   ]
 }

@@ -17,7 +17,8 @@ const mockLists = Array.from({ length: 12 }).map((_, i) => ({
 export default function ListsView({
   onGoLogin,
   onGoPeliculas,
-  onOpenListDetail, // <-- nuevo prop
+  onOpenListDetail,
+  onGoUsers = () => {},       
 }) {
   const [q, setQ] = useState("");
 
@@ -28,7 +29,6 @@ export default function ListsView({
       : mockLists.filter((l) => l.creator.toLowerCase().includes(t));
   }, [q]);
 
-  // Accesibilidad: abrir con Enter/Espacio
   const onKeyOpen = (e, list) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
@@ -58,7 +58,7 @@ export default function ListsView({
             <button type="button" className="nav__item nav__item--active">
               <FiList /> Listas
             </button>
-            <button type="button" className="nav__item">
+            <button type="button" className="nav__item" onClick={onGoUsers}>
               <FiUser /> Usuarios
             </button>
           </nav>
