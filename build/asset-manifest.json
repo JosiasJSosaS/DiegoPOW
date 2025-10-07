@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/DiegoPOW/static/css/main.efa41994.css",
-    "main.js": "/DiegoPOW/static/js/main.3c62da94.js",
+    "main.css": "/DiegoPOW/static/css/main.ea450e65.css",
+    "main.js": "/DiegoPOW/static/js/main.ae4af8f0.js",
     "index.html": "/DiegoPOW/index.html",
-    "main.efa41994.css.map": "/DiegoPOW/static/css/main.efa41994.css.map",
-    "main.3c62da94.js.map": "/DiegoPOW/static/js/main.3c62da94.js.map"
+    "main.ea450e65.css.map": "/DiegoPOW/static/css/main.ea450e65.css.map",
+    "main.ae4af8f0.js.map": "/DiegoPOW/static/js/main.ae4af8f0.js.map"
   },
   "entrypoints": [
-    "static/css/main.efa41994.css",
-    "static/js/main.3c62da94.js"
+    "static/css/main.ea450e65.css",
+    "static/js/main.ae4af8f0.js"
   ]
 }

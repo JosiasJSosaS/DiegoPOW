@@ -133,7 +133,11 @@
   flex-direction:column;
   gap:18px;
   overflow-y:auto;
-  padding-right:4px; /* espacio para la barra */
+  scroll-behavior:smooth;
+  
+  /* Espaciado lateral equilibrado */
+  padding-right:24px !important;  /* mismo espacio que el gap lateral */
+  padding-left:0;
 }
 
 /* ===== Search + Add ===== */
