@@ -1,4 +1,4 @@
-/* Reusa la misma paleta */
+/* ===== Paleta (misma que HomePublic) ===== */
 :root{
   --bg:#E4B1AB;
   --title:#CC444B;
@@ -10,7 +10,7 @@
   --topbar-h: 64px;        /* coherente con HomePublic */
 }
 
-/* Shell con topbar fija y main scrolleable */
+/* ===== Shell con topbar fija y main scrolleable ===== */
 .hp{
   height:100vh;
   display:grid;
@@ -19,7 +19,7 @@
   color:var(--ink);
 }
 
-/* Topbar */
+/* ===== Topbar ===== */
 .hp__topbar{
   background:var(--title);
   color:var(--text);
@@ -42,14 +42,14 @@
 }
 .hp__signin:hover{ background:rgba(255,255,255,.26); }
 
-/* Layout de 2 columnas */
+/* ===== Layout de 2 columnas ===== */
 .hp__layout{
   max-width:1200px; margin:0 auto; width:100%;
   display:grid; grid-template-columns:240px 1fr; gap:24px; padding:24px;
   overflow:hidden; /* evita scroll en el contenedor */
 }
 
-/* Sidebar fijo sin scroll */
+/* ===== Sidebar fijo sin scroll (mismo estilo) ===== */
 .hp__sidebar{
   background: color-mix(in srgb, var(--card) 38%, white 62%);
   border-radius:18px; padding:14px;
@@ -57,23 +57,43 @@
   box-shadow:0 12px 30px rgba(204,68,75,.25);
   height:100%; overflow:hidden;
 }
+
+/* Botones de navegación (normalizados como en HomePublic) */
 .nav__item{
+  -webkit-appearance:none;
+  appearance:none;
+  background:transparent;
+  border:0;
+  width:100%;
+  text-align:left;
+
   display:flex; align-items:center; gap:10px;
-  padding:12px 14px; border-radius:12px; color:#1f1f1f; font-weight:700; text-decoration:none;
+  padding:12px 14px; border-radius:12px;
+  color:#1f1f1f; font-weight:700; text-decoration:none;
+  cursor:pointer;
+  transition: background .15s ease, transform .15s ease;
 }
-.nav__item--active{ background:var(--card); box-shadow: inset 0 1px 0 rgba(255,255,255,.5); }
-.nav__item:not(.nav__item--active){ opacity:.85; }
+.nav__item:hover{
+  background:rgba(255,255,255,.35);
+  transform:translateY(-1px);
+}
+.nav__item--active{
+  background:var(--card);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5);
+}
+.nav__item:not(.nav__item--active){ opacity:.9; }
+
 .hp__profile{ display:flex; align-items:center; gap:12px; padding:8px 10px; margin-top:8px; }
 .pfp{ width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#7ae 0,#afa 100%); border:3px solid #fff; box-shadow:0 6px 12px rgba(0,0,0,.15); }
 .pfp__text{ font-weight:700; }
 
-/* Main con scroll */
+/* ===== Main con scroll ===== */
 .hp__main{
   display:flex; flex-direction:column; gap:18px;
   overflow-y:auto; padding-right:4px;
 }
 
-/* Buscador */
+/* ===== Buscador ===== */
 .hp__search{
   background:rgba(255,255,255,.28);
   border-radius:18px; padding:10px;
@@ -86,14 +106,14 @@
   border-radius:999px; font-size:16px;
 }
 
-/* Grid de listas */
+/* ===== Grid de listas ===== */
 .lists-grid{
   display:grid; gap:22px;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   padding-bottom:20px;
 }
 
-/* Tarjeta de lista (estética tipo “glass” claro) */
+/* ===== Tarjeta de lista (estética glass clara) ===== */
 .list-card{
   background:#eceff1;                 /* gris claro para diferenciarse de las películas (blancas) */
   border-radius:18px;
@@ -118,7 +138,6 @@
 }
 
 /* Texto */
-/*.list-card__body{ }*/
 .list-card__title{
   margin:8px 0 2px 0;
   font-size:16px; font-weight:800; color:#111;
@@ -128,9 +147,22 @@
 }
 .muted{ color:var(--muted); }
 
-/* Responsive */
+/* ===== Accesibilidad (igual que HomePublic) ===== */
+.nav__item:focus-visible{
+  outline:2px solid rgba(0,0,0,.25);
+  outline-offset:2px;
+}
+
+/* ===== Responsive ===== */
 @media (max-width:940px){
   .hp__layout{ grid-template-columns:1fr; }
   .hp__sidebar{ order:2; height:auto; }
   .hp__main{ overflow-y:visible; }
+}
+
+.nav__item,
+.list-card__title,
+.hp__topbar h1,
+.hp__signin {
+  font-size: 16px;
 }

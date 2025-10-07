@@ -166,6 +166,7 @@
   border-radius:999px;
   font-weight:800;
   cursor:pointer;
+  margin-left: 1000px;
 }
 
 /* Botón Añadir */
@@ -182,6 +183,7 @@
   box-shadow:0 10px 22px rgba(204,68,75,.24);
   justify-self:end;
   transition:transform .15s ease, background .15s ease;
+  margin-left: 1000px
 }
 .btn--add:hover{
   background:var(--card-hover);
